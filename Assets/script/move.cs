@@ -4,15 +4,26 @@ using UnityEngine;
 
 public class move : MonoBehaviour
 {
-    float speed = 3f;
-    private Transform simpleobject;
+    public float speed = 3f;
+    public float Jumpspeed = 7f;
+    bool Jump = false;
 
-    public enum Stages { stage1 = 1, stage2 = 2, stage3 = 3}
-    public Stages stages = Stages.stage1;
+    public BoxCollider2D col;
+
+    void Start()
+    {
+        col = gameObject.GetComponent<BoxCollider2D>();
+        //col.isTrigger = true;
+    }
 
     void FixedUpdate()
     {
         moveplayer();
+
+        if (Jump)
+        {
+            Jumpp();
+        }
 
         if (Input.GetKey(KeyCode.LeftShift))
         {
@@ -45,15 +56,31 @@ public class move : MonoBehaviour
             transform.Translate((Vector2.right * Time.deltaTime) * speed);
         }
 
-        if (Input.GetKey(KeyCode.W))
+
+        //jump
+        if (Input.GetKey(KeyCode.W)&&!Jump)
         {
-            transform.Translate((Vector2.up * Time.deltaTime) * speed);
+            Jump = true;
         }
 
         if (Input.GetKey(KeyCode.S))
         {
-            transform.Translate((Vector2.down * Time.deltaTime) * speed);
+            //transform.Translate((Vector2.down * Time.deltaTime) * speed);
         }
 
+    }
+
+
+    void Jumpp()
+    {
+        transform.Translate((Vector2.up * Time.deltaTime) * Jumpspeed);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            Jump = false;
+        }
     }
 }

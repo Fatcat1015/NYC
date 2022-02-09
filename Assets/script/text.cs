@@ -47,4 +47,5 @@ public class text : MonoBehaviour
             textt.text = d_text;
         }
     }
+
 }
